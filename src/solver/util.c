@@ -3,18 +3,53 @@
 #include <stdio.h>
 #include <math.h>
 
+#define ALTURA 7
+#define ANCHURA 7
+
+
+typedef struct{
+	int jump;
+	Position position;
+	Direction* direction;
+	BridgeNode* childs[255];
+}BridgeNode;
+
+bool backtrack(BridgeNode* bridge,int* matrix[7][7],Position goal){
+  int row = goal.row;
+  int col = goal.col;
+	if(matrix[row][col]) return true;
+
+	Position current = position_shift(bridge->position,bridge->direction);
+	if(position_eq(current,goal)) return true;
+	
+  
+
+	for(int i = 0; i < 3; i++)
+	{
+		BridgeNode* child = bridge->childs[i];
+    if(!child){
+      break;
+    }
+		backtrack(child,matrix,goal);
+	}
+
+	return false;
+
+}
+
 /** Mueve la posición en la dirección especificada */
 Position position_shift(Position pos, Direction dir)
 {
-  switch (dir) {
-    case UP:
-      return (Position){.row = pos.row - 1, .col = pos.col};
-    case DOWN:
-      return (Position){.row = pos.row + 1, .col = pos.col};
-    case LEFT:
-      return (Position){.row = pos.row, .col = pos.col - 1};
-    case RIGHT:
-      return (Position){.row = pos.row, .col = pos.col + 1};
+  switch (dir)
+  {
+  case UP:
+    return (Position){.row = pos.row - 1, .col = pos.col};
+  case DOWN:
+    return (Position){.row = pos.row + 1, .col = pos.col};
+  case LEFT:
+    return (Position){.row = pos.row, .col = pos.col - 1};
+  case RIGHT:
+    return (Position){.row = pos.row, .col = pos.col + 1};
   }
 
   fprintf(stderr, "Dirección inválida: %u\n", dir);
@@ -33,8 +68,10 @@ uint8_t longest_distance(Position pos1, Position pos2)
   uint8_t dist_row = pos1.row > pos2.row ? pos1.row - pos2.row : pos2.row - pos1.row;
   uint8_t dist_col = pos1.col > pos2.col ? pos1.col - pos2.col : pos2.col - pos1.col;
 
-  if(dist_row > dist_col) return dist_row;
-  else return dist_col;
+  if (dist_row > dist_col)
+    return dist_row;
+  else
+    return dist_col;
 }
 
 /** Calcula la distancia manhattan entre ambos puntos */
@@ -52,8 +89,10 @@ uint8_t shortest_distance(Position pos1, Position pos2)
   uint8_t dist_row = pos1.row > pos2.row ? pos1.row - pos2.row : pos2.row - pos1.row;
   uint8_t dist_col = pos1.col > pos2.col ? pos1.col - pos2.col : pos2.col - pos1.col;
 
-  if(dist_row < dist_col) return dist_row;
-  else return dist_col;
+  if (dist_row < dist_col)
+    return dist_row;
+  else
+    return dist_col;
 }
 
 /** Indica si dos posiciones están alineadas */
@@ -65,13 +104,13 @@ bool position_aligned(Position pos1, Position pos2)
 Direction position_direction(Position from, Position to)
 {
   // Estan en la misma fila
-  if(from.row == to.row)
+  if (from.row == to.row)
   {
-    if(from.col < to.col)
+    if (from.col < to.col)
     {
       return RIGHT;
     }
-    else if(from.col > to.col)
+    else if (from.col > to.col)
     {
       return LEFT;
     }
@@ -82,13 +121,13 @@ Direction position_direction(Position from, Position to)
     }
   }
   // Estan en la misma columna
-  else if(from.col == to.col)
+  else if (from.col == to.col)
   {
-    if(from.row < to.row)
+    if (from.row < to.row)
     {
       return DOWN;
     }
-    else if(from.row > to.row)
+    else if (from.row > to.row)
     {
       return UP;
     }
