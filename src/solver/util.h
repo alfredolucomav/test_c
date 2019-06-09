@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define ALTURA 7
+#define ANCHURA 7
+
 /****************************************************************************/
 /*                                  Util                                    */
 /*                                                                          */
@@ -44,4 +47,4 @@ bool position_aligned(Position pos1, Position pos2);
 /** Entrega la dirección de una posicion a otra. Asume que están alineadas */
 Direction position_direction(Position from, Position to);
 
-bool backtrack(BridgeNode bridge,int* matrix[][],Position goal);
+bool backtrack(struct BridgeNode * bridge,int* matrix[ALTURA][ANCHURA],Position goal);

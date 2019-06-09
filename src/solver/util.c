@@ -3,18 +3,14 @@
 #include <stdio.h>
 #include <math.h>
 
-#define ALTURA 7
-#define ANCHURA 7
-
-
-typedef struct{
+struct BridgeNode{
 	int jump;
 	Position position;
 	Direction* direction;
-	BridgeNode* childs[255];
-}BridgeNode;
+	struct BridgeNode* childs[255];
+};
 
-bool backtrack(BridgeNode* bridge,int* matrix[7][7],Position goal){
+bool backtrack(struct BridgeNode * bridge,int* matrix[ALTURA][ANCHURA],Position goal){
   int row = goal.row;
   int col = goal.col;
 	if(matrix[row][col]) return true;
@@ -26,7 +22,7 @@ bool backtrack(BridgeNode* bridge,int* matrix[7][7],Position goal){
 
 	for(int i = 0; i < 3; i++)
 	{
-		BridgeNode* child = bridge->childs[i];
+		struct BridgeNode* child = bridge->childs[i];
     if(!child){
       break;
     }
